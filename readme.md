@@ -1,1 +1,1 @@
-rps 
+This is a project for rock-paper-scissors game online.
