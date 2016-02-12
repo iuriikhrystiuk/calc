@@ -131,7 +131,12 @@ if EXIST "%DEPLOYMENT_SOURCE%\bower.json" (
 
 :: 4. Run grunt build task
 echo Running grunt build
-if EXIST "%DEPLOYMENT_SOURCE%\bower.json" (
+if EXIST "%DEPLOYMENT_SOURCE%\Gruntfile.js" (
+    :: Hotfix for grunt and npm dependencies http://stackoverflow.com/a/35153955
+    pushd ./node_modules/grunt
+    call !NPM_CMD! install glob@^6.0.4 --save
+    popd
+    
     pushd %DEPLOYMENT_SOURCE%
     call !GRUNT_CMD! build
     IF !ERRORLEVEL! NEQ 0 goto error
