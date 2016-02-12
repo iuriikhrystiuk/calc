@@ -48,6 +48,16 @@ IF NOT DEFINED KUDU_SYNC_CMD (
   SET KUDU_SYNC_CMD=%appdata%\npm\kuduSync.cmd
 )
 
+IF NOT DEFINED BOWER_CMD (
+  :: Install bower
+  echo Installing Bower
+  call npm --registry "http://registry.npmjs.org/" install bower -g
+  IF !ERRORLEVEL! NEQ 0 goto error
+
+  :: Locally just running "bower" would also work
+  SET BOWER_CMD=node "%appdata%\npm\node_modules\bower\bin\grunt"
+)
+
 IF NOT DEFINED GRUNT_CMD (
   :: Install grunt
   echo Installing Grunt
@@ -110,23 +120,29 @@ if EXIST "%DEPLOYMENT_SOURCE%\package.json" (
   popd
 )
 
-:: 3. Run grunt build task
-pushd %DEPLOYMENT_SOURCE%
-call !GRUNT_CMD! build
-popd
+:: 3. Install bower packages
+echo Installing bower dev dependendencies
+if EXIST "%DEPLOYMENT_SOURCE%\bower.json" (
+  pushd %DEPLOYMENT_SOURCE%
+  call !BOWER_CMD! install
+  IF !ERRORLEVEL! NEQ 0 goto error
+  popd
+)
+
+:: 4. Run grunt build task
+echo Running grunt build
+if EXIST "%DEPLOYMENT_SOURCE%\bower.json" (
+    pushd %DEPLOYMENT_SOURCE%
+    call !GRUNT_CMD! build
+    IF !ERRORLEVEL! NEQ 0 goto error
+    popd
+)
+
 
 :: 4. KuduSync
 IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
   call :ExecuteCmd "%KUDU_SYNC_CMD%" -v 50 -f "%DEPLOYMENT_SOURCE%" -t "%DEPLOYMENT_TARGET%" -n "%NEXT_MANIFEST_PATH%" -p "%PREVIOUS_MANIFEST_PATH%" -i ".git;.hg;.deployment;deploy.cmd"
   IF !ERRORLEVEL! NEQ 0 goto error
-)
-
-:: 5. Install npm packages
-IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
-  pushd %DEPLOYMENT_TARGET%
-  call !NPM_CMD! install --production
-  IF !ERRORLEVEL! NEQ 0 goto error
-  popd
 )
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
