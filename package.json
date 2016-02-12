@@ -1,0 +1,33 @@
+{
+  "name": "rps",
+  "version": "0.0.1",
+  "description": "The Rock Paper Scissors Game",
+  "main": "src",
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-concat": "^0.5.1",
+    "grunt-contrib-cssmin": "^0.14.0",
+    "grunt-contrib-uglify": "^0.11.1",
+    "grunt-copy": "^0.1.0",
+    "grunt-filerev": "^2.3.1",
+    "grunt-include-source": "^0.7.1",
+    "grunt-serve": "^0.1.6",
+    "grunt-usemin": "^3.0.0",
+    "grunt-wiredep": "^2.0.0",
+    "wiredep": "^3.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iuriikhrystiuk/rps.git"
+  },
+  "keywords": [
+    "RPS"
+  ],
+  "author": "Iurii Khrystiuk",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/iuriikhrystiuk/rps/issues"
+  },
+  "homepage": "https://github.com/iuriikhrystiuk/rps#readme"
+}

@@ -1,0 +1,35 @@
+{
+  "name": "RPS",
+  "description": "The Rock Paper Scissors Game",
+  "main": "src",
+  "authors": [
+    "Iurii Khrystiuk"
+  ],
+  "license": "UNLICENSED",
+  "keywords": [
+    "RPS"
+  ],
+  "homepage": "https://github.com/iuriikhrystiuk/rps",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "appPath": "src",
+  "dependencies": {
+    "angular": "^1.5.0",
+    "bootstrap": "^3.3.6"
+  },
+  "overrides": {
+    "bootstrap": {
+      "main": [
+        "dist/js/bootstrap.js",
+        "dist/css/bootstrap.css",
+        "less/bootstrap.less"
+      ]
+    }
+  }
+}
