@@ -55,7 +55,7 @@ IF NOT DEFINED BOWER_CMD (
   IF !ERRORLEVEL! NEQ 0 goto error
 
   :: Locally just running "bower" would also work
-  SET BOWER_CMD=node "%appdata%\npm\node_modules\bower\bin\grunt"
+  SET BOWER_CMD=node "%appdata%\npm\node_modules\bower\bin\bower"
 )
 
 IF NOT DEFINED GRUNT_CMD (
