@@ -7,6 +7,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-copy');
     grunt.loadNpmTasks('grunt-include-source');
     grunt.loadNpmTasks('grunt-serve');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
     
     // Project configuration.
     grunt.initConfig({
@@ -35,6 +36,12 @@ module.exports = function (grunt) {
                     'src/index.html': 'src/index.html',
                 }
             }
+        },
+        jshint: {
+            all: [
+                'Gruntfile.js',
+                'src/scripts/**/*.js'
+            ]
         },
         useminPrepare: {
             html: 'src/index.html',
@@ -70,6 +77,7 @@ module.exports = function (grunt) {
 
     // Default task(s).
     grunt.registerTask('build', [
+        'jshint',
         'wiredep',
         'includeSource',
         'copy:html',
@@ -79,5 +87,9 @@ module.exports = function (grunt) {
         'uglify:generated',
         'usemin']);
 
-    grunt.registerTask('default', ['build', 'serve'])
+    grunt.registerTask('default', [
+        'jshint', 
+        'wiredep', 
+        'includeSource', 
+        'serve']);
 };
