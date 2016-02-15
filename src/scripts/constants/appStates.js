@@ -4,7 +4,8 @@
     var applicationStates = {
         APP: {
             STATE: 'app',
-            PRACTICE: 'app.practice'
+            PRACTICE: 'app.practice',
+            HOME: 'app.home'
         }
     };
     

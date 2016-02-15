@@ -2,11 +2,16 @@
     'use strict';
 
     function Configurer($stateProvider, $urlRouterProvider, APP_STATES) {
-        $urlRouterProvider.otherwise('/');
+        $urlRouterProvider.otherwise('home');
 
         $stateProvider.state(APP_STATES.APP.STATE, {
             url: '/',
             templateUrl: 'views/main.html'
+        });
+        
+        $stateProvider.state(APP_STATES.APP.HOME, {
+            url: 'home',
+            templateUrl: 'views/home.html'
         });
         
         $stateProvider.state(APP_STATES.APP.PRACTICE, {
