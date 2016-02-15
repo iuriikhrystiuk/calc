@@ -14,7 +14,11 @@ module.exports = function (grunt) {
     // Project configuration.
     grunt.initConfig({
         app: {
-            scripts: ['scripts/**/*.js']
+            scripts: [
+                'scripts/modules/*.js',
+                'scripts/constants/*.js',
+                'scripts/*.js'
+            ]
         },
         wiredep: {
             app: {
