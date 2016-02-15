@@ -6,8 +6,10 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-copy');
     grunt.loadNpmTasks('grunt-include-source');
-    grunt.loadNpmTasks('grunt-serve');
+    grunt.loadNpmTasks('grunt-http-server');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-angular-templates');
+    grunt.loadNpmTasks('grunt-htmlmin');
     
     // Project configuration.
     grunt.initConfig({
@@ -67,9 +69,51 @@ module.exports = function (grunt) {
         usemin: {
             html: ['dist/index.html']
         },
-        serve: {
-            options: {
-                port: 9000,
+        htmlmin: {
+            app: {
+                options: {
+                    removeCommentsFromCDATA: true,
+                    // https://github.com/yeoman/grunt-usemin/issues/44
+                    collapseWhitespace: true,
+                    collapseBooleanAttributes: true,
+                    conservativeCollapse: true,
+                    removeAttributeQuotes: false,
+                    removeRedundantAttributes: true,
+                    useShortDoctype: true,
+                    removeEmptyAttributes: true,
+                    keepClosingSlash: true
+                },
+                files: {
+                    src: 'dist/*.html',
+                    dest: '.'
+                }
+            }
+        },
+        ngtemplates: {
+            app: {
+                src: 'src/views/**/*.html',
+                dest: '.tmp/templates/app.templates.js',
+                options: {
+                    module: 'rps',
+                    usemin: 'dist/js/app.js',
+                    htmlmin: '<%= htmlmin.options %>'
+                }
+            }
+        },
+        'http-server': {
+            dev: {
+                root: 'src',
+                port: 9090,
+                autoIndex: true,
+                // server default file extension 
+                ext: "html"
+            },
+            prod: {
+                root: 'dist',
+                port: 9090,
+                autoIndex: true,
+                // server default file extension 
+                ext: "html"
             }
         }
     });
@@ -82,14 +126,20 @@ module.exports = function (grunt) {
         'includeSource',
         'copy:html',
         'useminPrepare',
+        'ngtemplates',
         'concat:generated',
         'cssmin:generated',
         'uglify:generated',
-        'usemin']);
+        'usemin',
+        'htmlmin']);
 
     grunt.registerTask('default', [
-        'jshint', 
-        'wiredep', 
-        'includeSource', 
-        'serve']);
+        'jshint',
+        'wiredep',
+        'includeSource',
+        'http-server:dev']);
+
+    grunt.registerTask('prod', [
+        'build',
+        'http-server:prod']);
 };
