@@ -17,7 +17,9 @@ module.exports = function (grunt) {
             scripts: [
                 'scripts/modules/*.js',
                 'scripts/constants/*.js',
-                'scripts/*.js'
+                'scripts/*.js',
+                'scripts/services/*.js',
+                'scripts/controllers/*.js'
             ]
         },
         wiredep: {

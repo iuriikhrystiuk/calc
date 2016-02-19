@@ -11,6 +11,7 @@
         
         $stateProvider.state(APP_STATES.APP.HOME, {
             url: 'home',
+            controller: 'HomeCtrl',
             templateUrl: 'views/home.html'
         });
         
