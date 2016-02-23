@@ -1,5 +1,5 @@
 (function () {
-    function StoriesService() {
+    function StoriesProvider() {
         function _getRandomIndexExcept(length, index) {
             var randomIndex = Math.floor(Math.random() * length);
             if (randomIndex !== index) {
@@ -59,7 +59,7 @@
         };
     }
 
-    StoriesService.$inject = [];
+    StoriesProvider.$inject = [];
 
-    angular.module('rps').factory('storiesService', StoriesService);
+    angular.module('rps').factory('storiesProvider', StoriesProvider);
 } ());

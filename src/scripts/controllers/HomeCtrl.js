@@ -1,25 +1,34 @@
 (function () {
-    var doNothingActions = [{name: 'stop', sections: [
-        {name: '1', story: 'Stop it!'},
-        {name: '2', story: 'Stop doing that!'}
-    ]},
-    {name:'argh', sections:[
-        {name: '3', story: 'URGHHH!'},
-        {name: '4', story: 'WAAAAAIT!'},
-        {name: '5', story: 'C\'MOOON!'}
-    ]}];
+    var doNothingActions = [];
 
-    function HomeController($scope, storiesService) {
+    function HomeController($scope, storiesProvider, storiesBuilder) {
         $scope.doesCurrent = {story:'You are being Hello\'ed, from RPS!'};
 
+        var story = storiesBuilder.createStory()
+                    .addSection('Stop it!')
+                    .addSection('Stop doing that!')
+                    .addSection('Why don\'t you...')
+                    .addSection('... go...')
+                    .addSection('... and kill yourself!')
+                    .getStory();
+                    
+        doNothingActions.push(story); 
+        story = storiesBuilder.createStory()
+                    .addSection('URGHHH!')
+                    .addSection('WAAAAAIT!')
+                    .addSection('C\'MOOON!')
+                    .addSection('Take your stinkin\' paws off me you damn dirty ape!')
+                    .getStory();
+        doNothingActions.push(story); 
+
         function _doNothing() {
-            $scope.doesCurrent = storiesService.getNext(doNothingActions, $scope.doesCurrent);
+            $scope.doesCurrent = storiesProvider.getNext(doNothingActions, $scope.doesCurrent);
         }
 
         $scope.doNothing = _doNothing;
     }
 
-    HomeController.$inject = ['$scope', 'storiesService'];
+    HomeController.$inject = ['$scope', 'storiesProvider', 'storiesBuilder'];
 
     angular.module('rps').controller('HomeCtrl', HomeController);
 } ());
