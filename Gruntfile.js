@@ -97,7 +97,8 @@ module.exports = function (grunt) {
         },
         ngtemplates: {
             app: {
-                src: 'src/views/**/*.html',
+                cwd: 'src',
+                src: 'views/**/*.html',
                 dest: '.tmp/templates/app.templates.js',
                 options: {
                     module: 'rps',
