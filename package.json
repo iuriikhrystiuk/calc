@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "description": "The DPS Calculator",
   "main": "src",
+  "engines" : { 
+    "node" : ">=4.4.2"
+  },
   "dependencies": {},
   "devDependencies": {
     "grunt": "^0.4.5",
@@ -27,7 +30,7 @@
     "url": "git+https://github.com/iuriikhrystiuk/calc.git"
   },
   "keywords": [
-    "RPS"
+    "DPS"
   ],
   "author": "Iurii Khrystiuk",
   "license": "UNLICENSED",
