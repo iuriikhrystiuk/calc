@@ -2,7 +2,7 @@
     var doNothingActions = [];
 
     function HomeController($scope, storiesProvider, storiesBuilder) {
-        $scope.doesCurrent = {story:'You are being Hello\'ed, from RPS!'};
+        $scope.doesCurrent = {story:'You are being Hello\'ed, from DPS!'};
 
         var story = storiesBuilder.createStory()
                     .addSection('Stop it!')

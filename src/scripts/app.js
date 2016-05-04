@@ -15,9 +15,9 @@
             templateUrl: 'views/home.html'
         });
         
-        $stateProvider.state(APP_STATES.APP.PRACTICE, {
-            url: 'practice',
-            templateUrl: 'views/practice.html'
+        $stateProvider.state(APP_STATES.APP.BUILD, {
+            url: 'build',
+            templateUrl: 'views/build.html'
         });
     }
 
