@@ -30,5 +30,5 @@
 
     HomeController.$inject = ['$scope', 'storiesProvider', 'storiesBuilder'];
 
-    angular.module('rps').controller('HomeCtrl', HomeController);
+    angular.module('dps').controller('HomeCtrl', HomeController);
 } ());

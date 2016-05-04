@@ -36,5 +36,5 @@
         this.getStory = _getStory;
     }
 
-    angular.module('rps').service('storiesBuilder', StoriesBuilder);
+    angular.module('dps').service('storiesBuilder', StoriesBuilder);
 } ());

@@ -61,5 +61,5 @@
 
     StoriesProvider.$inject = [];
 
-    angular.module('rps').factory('storiesProvider', StoriesProvider);
+    angular.module('dps').factory('storiesProvider', StoriesProvider);
 } ());

@@ -1,7 +1,7 @@
 {
-  "name": "rps",
+  "name": "dps",
   "version": "0.0.1",
-  "description": "The Rock Paper Scissors Game",
+  "description": "The DPS Calculator",
   "main": "src",
   "dependencies": {},
   "devDependencies": {
@@ -24,7 +24,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/iuriikhrystiuk/rps.git"
+    "url": "git+https://github.com/iuriikhrystiuk/calc.git"
   },
   "keywords": [
     "RPS"
@@ -32,7 +32,7 @@
   "author": "Iurii Khrystiuk",
   "license": "UNLICENSED",
   "bugs": {
-    "url": "https://github.com/iuriikhrystiuk/rps/issues"
+    "url": "https://github.com/iuriikhrystiuk/calc/issues"
   },
-  "homepage": "https://github.com/iuriikhrystiuk/rps#readme"
+  "homepage": "https://github.com/iuriikhrystiuk/calc#readme"
 }

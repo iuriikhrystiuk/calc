@@ -1,15 +1,15 @@
 {
-  "name": "RPS",
-  "description": "The Rock Paper Scissors Game",
+  "name": "DPS Calc",
+  "description": "The DPS calculator Game",
   "main": "src",
   "authors": [
     "Iurii Khrystiuk"
   ],
   "license": "UNLICENSED",
   "keywords": [
-    "RPS"
+    "DPS"
   ],
-  "homepage": "https://github.com/iuriikhrystiuk/rps",
+  "homepage": "https://github.com/iuriikhrystiuk/calc",
   "private": true,
   "ignore": [
     "**/.*",

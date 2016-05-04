@@ -101,7 +101,7 @@ module.exports = function (grunt) {
                 src: 'views/**/*.html',
                 dest: '.tmp/templates/app.templates.js',
                 options: {
-                    module: 'rps',
+                    module: 'dps',
                     usemin: 'dist/js/app.js',
                     htmlmin: '<%= htmlmin.options %>'
                 }

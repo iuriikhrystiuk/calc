@@ -9,5 +9,5 @@
         }
     };
     
-    angular.module('rps.constants').constant('APP_STATES', applicationStates);
+    angular.module('dps.constants').constant('APP_STATES', applicationStates);
 } ());
