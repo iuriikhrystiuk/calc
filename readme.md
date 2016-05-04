@@ -1,1 +1,1 @@
-This is a project for rock-paper-scissors game online.
+This is a project for dps calculator.
