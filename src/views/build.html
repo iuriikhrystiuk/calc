@@ -1,5 +1,4 @@
 <h1>Build your own formula!</h1>
-<h4>* currently supported operators: +, -, *, /, (, )</h4>
 <form class="form-horizontal">
     <div class="form-group">
         <label class="col-sm-2 control-label">Result:</label>
@@ -35,6 +34,23 @@
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
             <button type="submit" class="btn btn-default" ng-click="parse()">Calculate</button>
+            <button type="submit" class="btn btn-default" ng-click="clear()">Clear</button>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-8 col-sm-4">
+            <div>
+                <small>* currently supported operators: +, -, *, /, (, )</small>
+            </div>
+            <div>
+                <small>* number decimal symbol is '.'</small>
+            </div>
+            <div>
+                <small>* you can generate formulas that include number and identifiers</small>
+            </div>
+            <div>
+                <small>* indentifiers accept numbers only</small>
+            </div>
         </div>
     </div>
 </form>

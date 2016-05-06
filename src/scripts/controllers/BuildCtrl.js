@@ -63,7 +63,15 @@
 
         }
 
+        function _clear() {
+            $scope.errors = null;
+            $scope.result = '';
+            $scope.formula = null;
+            $scope.missingIdentifiers = null;
+        }
+
         $scope.parse = _parse;
+        $scope.clear = _clear;
     }
 
     BuildController.$inject = ['$scope', 'lexer', 'evaluator'];
