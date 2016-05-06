@@ -17,6 +17,7 @@
         
         $stateProvider.state(APP_STATES.APP.BUILD, {
             url: 'build',
+            controller: 'BuildCtrl',
             templateUrl: 'views/build.html'
         });
     }
