@@ -29,7 +29,7 @@
                     return a / b;
                 }
             }
-        ]
+        ];
 
         function _evaluateOperand(operand, context) {
             if (operand.type === 'NUMBER') {
@@ -47,7 +47,7 @@
             if (tokens.length === 0) {
                 return 0;
             }
-            
+
             if (tokens.length === 1) {
                 return _evaluateOperand(tokens[0], context);
             }
