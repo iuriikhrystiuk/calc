@@ -1,61 +1,23 @@
 (function () {
-    function BuildController($scope, lexer, evaluator) {
+    function BuildController($scope, lexer, evaluator, context) {
 
-        $scope.formula = null;
+        $scope.formula = '';
         $scope.result = '';
         $scope.errors = null;
-        $scope.missingIdentifiers = null;
-
-        function _populateContext(context) {
-            var populatedItems = 0;
-            if ($scope.missingIdentifiers) {
-                angular.forEach(context, function (item) {
-                    angular.forEach($scope.missingIdentifiers, function (ident) {
-                        if (item.identifier.value === ident.identifier.value) {
-                            item.value = ident.value;
-                            populatedItems++;
-                            return false;
-                        }
-
-                        return true;
-                    });
-                });
-            }
-
-            return populatedItems === context.length;
-        }
+        $scope.currentContext = null;
 
         function _parse() {
             try {
                 $scope.errors = null;
                 $scope.result = '';
                 var tokens = lexer.parse($scope.formula);
-                var context = [];
-                angular.forEach(tokens, function (item) {
-                    if (item.type === 'IDENTIFIER') {
-                        var alreadyExists = false;
-                        angular.forEach(this, function (ident) {
-                            if (item.value === ident.identifier.value) {
-                                alreadyExists = true;
-                                return false;
-                            }
-
-                            return true;
-                        });
-
-                        if (!alreadyExists) {
-                            this.push({
-                                identifier: item,
-                                value: null
-                            });
-                        }
-                    }
-                }, context);
-                if (!_populateContext(context)) {
-                    $scope.missingIdentifiers = context;
+                var tokensContext = context.get(tokens);
+                if (!context.merge(tokensContext, $scope.currentContext)) {
+                    $scope.currentContext = tokensContext;
+                    
                 }
                 else {
-                    $scope.result = evaluator.evaluate(tokens, context);
+                    $scope.result = evaluator.evaluate(tokens, tokensContext);
                 }
             } catch (error) {
                 $scope.errors = error.message || error;
@@ -66,15 +28,15 @@
         function _clear() {
             $scope.errors = null;
             $scope.result = '';
-            $scope.formula = null;
-            $scope.missingIdentifiers = null;
+            $scope.formula = '';
+            $scope.currentContext = null;
         }
 
         $scope.parse = _parse;
         $scope.clear = _clear;
     }
 
-    BuildController.$inject = ['$scope', 'lexer', 'evaluator'];
+    BuildController.$inject = ['$scope', 'lexer', 'evaluator', 'context'];
 
     angular.module('dps').controller('BuildCtrl', BuildController);
 } ());

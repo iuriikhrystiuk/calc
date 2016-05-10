@@ -19,14 +19,12 @@
         underscore = '_',
         whitespace = ' ',
         dot = '.',
-        operator = '^[\+,\*,\/,\-]$',
         letter = '^[a-z]$',
         digit = '^[1-9]$',
         priorityModifier = 0,
-        priorityDifference = 2,
         tokens = [];
 
-    function Lexer() {
+    function Lexer(CALC_TOKENS, operatorsRegistry) {
         var position = 0;
 
         function _isZero(c) {
@@ -50,7 +48,7 @@
         }
 
         function _isOperator(c) {
-            return new RegExp(operator).test(c);
+            return operatorsRegistry.defined(c);
         }
 
         function _nextChar(str) {
@@ -84,7 +82,7 @@
 
         function _parseOpenBracket(str) {
             if (str[position] === '(') {
-                priorityModifier += priorityDifference;
+                priorityModifier += 1;
                 while (_nextChar(str) && str[position] === '(') {
                     priorityModifier++;
                 }
@@ -93,7 +91,7 @@
 
         function _parseCloseBracket(str) {
             if (str[position] === ')') {
-                priorityModifier -= priorityDifference;
+                priorityModifier -= 1;
                 while (_nextChar(str) && str[position] === ')') {
                     priorityModifier--;
                 }
@@ -132,13 +130,15 @@
 
         function _parseOperator(str) {
             if (_isOperator(str[position])) {
-                tokens.push({
-                    type: 'OPERATOR',
-                    value: str[position],
-                    priority: 1 + priorityModifier
-                });
-
-                _nextChar(str);
+                var currentOperator = str[position];
+                while(_nextChar(str) && _isOperator(currentOperator + str[position])){
+                    currentOperator += str[position];
+                }
+                
+                var operator = operatorsRegistry.getOperator(currentOperator);
+                operator.priority += priorityModifier * operatorsRegistry.getPriorityDifference();
+                operator.type = CALC_TOKENS.OPERATOR;
+                tokens.push(operator);
                 return;
             }
 
@@ -152,7 +152,7 @@
                 var number = _parseNumber(str);
                 if (number) {
                     tokens.push({
-                        type: 'NUMBER',
+                        type: CALC_TOKENS.NUMBER,
                         value: number
                     });
                 } else {
@@ -162,7 +162,7 @@
                 var identifier = _parseIdentifier(str);
                 if (identifier) {
                     tokens.push({
-                        type: 'IDENTIFIER',
+                        type: CALC_TOKENS.IDENTIFIER,
                         value: identifier
                     });
                 }
@@ -218,6 +218,8 @@
 
         this.parse = _parse;
     }
+    
+    Lexer.$inject = ['CALC_TOKENS', 'operatorsRegistry'];
 
-    angular.module('dps').service('lexer', Lexer);
+    angular.module('dps.engine').service('lexer', Lexer);
 } ());

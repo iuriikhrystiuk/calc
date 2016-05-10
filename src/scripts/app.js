@@ -24,6 +24,6 @@
 
     Configurer.$inject = ['$stateProvider', '$urlRouterProvider', 'APP_STATES'];
 
-    angular.module('dps', ['ui.router', 'dps.constants'])
+    angular.module('dps', ['ui.router', 'dps.constants', 'dps.engine'])
         .config(Configurer);
 } ());
