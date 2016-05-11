@@ -1,23 +1,19 @@
 (function () {
-    function BuildController($scope, lexer, evaluator, context) {
+    function BuildController($scope, formula) {
 
         $scope.formula = '';
         $scope.result = '';
         $scope.errors = null;
-        $scope.currentContext = null;
+        $scope.currentContext = [];
 
-        function _parse() {
+        function _calculate() {
             try {
                 $scope.errors = null;
                 $scope.result = '';
-                var tokens = lexer.parse($scope.formula);
-                var tokensContext = context.get(tokens);
-                if (!context.merge(tokensContext, $scope.currentContext)) {
-                    $scope.currentContext = tokensContext;
-                    
-                }
-                else {
-                    $scope.result = evaluator.evaluate(tokens, tokensContext);
+                formula.create($scope.formula);
+                var result = formula.evaluate($scope.currentContext);
+                if (result) {
+                    $scope.result = result;
                 }
             } catch (error) {
                 $scope.errors = error.message || error;
@@ -29,14 +25,14 @@
             $scope.errors = null;
             $scope.result = '';
             $scope.formula = '';
-            $scope.currentContext = null;
+            $scope.currentContext = [];
         }
 
-        $scope.parse = _parse;
+        $scope.calculate = _calculate;
         $scope.clear = _clear;
     }
 
-    BuildController.$inject = ['$scope', 'lexer', 'evaluator', 'context'];
+    BuildController.$inject = ['$scope', 'formula'];
 
     angular.module('dps').controller('BuildCtrl', BuildController);
 } ());

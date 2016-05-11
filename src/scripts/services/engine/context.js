@@ -2,19 +2,34 @@
     function Context(CALC_TOKENS) {
         function _setTokenValueType(token) {
             try {
-                var value = Number(token.value);
-                if (value) {
-                    token.type = CALC_TOKENS.NUMBER;
-                    return true;
-                }
+                if (token.value) {
+                    var value = Number(token.value);
+                    if (value) {
+                        token.type = CALC_TOKENS.NUMBER;
+                        return true;
+                    }
 
-                token.type = CALC_TOKENS.FORMULA;
+                    token.type = CALC_TOKENS.FORMULA;
+                }
+                else {
+                    token.type = CALC_TOKENS.NUMBER;
+                }
             }
             catch (e) {
                 token.type = CALC_TOKENS.FORMULA;
             }
 
             return false;
+        }
+
+        function _append(targetContext, sourceContext) {
+            _.each(sourceContext, function (item) {
+                if (!_.some(targetContext, function (t) {
+                    return t.identifier.value === item.identifier.value;
+                })) {
+                    targetContext.push(item);
+                }
+            });
         }
 
         function _merge(targetContext, sourceContext) {
@@ -52,6 +67,7 @@
 
         this.get = _get;
         this.merge = _merge;
+        this.append = _append;
     }
 
     Context.$inject = ['CALC_TOKENS'];

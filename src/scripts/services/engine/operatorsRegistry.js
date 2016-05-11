@@ -7,7 +7,7 @@
         }
 
         function _getOperators() {
-            return operators;
+            return angular.copy(operators);
         }
 
         function _getPriorityDifference() {
@@ -23,7 +23,7 @@
         }
 
         function _getOperator(name) {
-            return _.findWhere(operators, { operator: name });
+            return angular.copy(_.findWhere(operators, { operator: name }));
         }
 
         function _defined(name) {

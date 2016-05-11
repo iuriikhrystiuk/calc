@@ -15,21 +15,16 @@
     // expression = factor|function
     // formula = expression|[expression],operator,expression
 
-    var zero = '0',
-        underscore = '_',
+    var underscore = '_',
         whitespace = ' ',
         dot = '.',
         letter = '^[a-z]$',
-        digit = '^[1-9]$',
+        digit = '^[0-9]$',
         priorityModifier = 0,
         tokens = [];
 
     function Lexer(CALC_TOKENS, operatorsRegistry) {
         var position = 0;
-
-        function _isZero(c) {
-            return c === zero;
-        }
 
         function _isUnderscore(c) {
             return c === underscore;
@@ -64,12 +59,15 @@
             position = 0;
             tokens = [];
             priorityModifier = 0;
-            var formula = str.replace(/ /g, '');
-            _parseFormula(formula);
-            if (priorityModifier > 0) {
-                throw 'Invalid opening/closing brackets count.';
+            if (str) {
+                var formula = str.replace(/ /g, '').toLowerCase();
+                _parseFormula(formula);
+                if (priorityModifier > 0) {
+                    throw 'Invalid opening/closing brackets count.';
+                }
+                return tokens;
             }
-            return tokens;
+            return [];
         }
 
         function _parseFormula(str) {
@@ -131,10 +129,10 @@
         function _parseOperator(str) {
             if (_isOperator(str[position])) {
                 var currentOperator = str[position];
-                while(_nextChar(str) && _isOperator(currentOperator + str[position])){
+                while (_nextChar(str) && _isOperator(currentOperator + str[position])) {
                     currentOperator += str[position];
                 }
-                
+
                 var operator = operatorsRegistry.getOperator(currentOperator);
                 operator.priority += priorityModifier * operatorsRegistry.getPriorityDifference();
                 operator.type = CALC_TOKENS.OPERATOR;
@@ -177,18 +175,15 @@
             if (_isDigit(str[position])) {
                 currentNumber += str[position];
                 while (_nextChar(str)) {
-                    if (_isDigit(str[position]) || _isZero(str[position])) {
+                    if (_isDigit(str[position])) {
                         currentNumber += str[position];
                     } else if (_isDot(str[position])) {
                         currentNumber += str[position];
-                        while (_nextChar(str) && (_isZero(str[position]) || _isDigit(str[position]))) {
+                        while (_nextChar(str) && _isDigit(str[position])) {
                             currentNumber += str[position];
                         }
-                        if (_isDigit(str[position - 1])) {
-                            break;
-                        }
 
-                        throw 'Invalid character ' + str[position] + ' at ' + position;
+                        break;
                     } else {
                         break;
                     }
@@ -205,7 +200,7 @@
             var currentIdentifier = '';
             if (_isLetter(str[position])) {
                 currentIdentifier += str[position];
-                while (_nextChar(str) && (_isLetter(str[position]) || _isDigit(str[position]) || _isZero(str[position]) || _isUnderscore(str[position]))) {
+                while (_nextChar(str) && (_isLetter(str[position]) || _isDigit(str[position]) || _isUnderscore(str[position]))) {
                     currentIdentifier += str[position];
                 }
                 return currentIdentifier;
@@ -218,7 +213,7 @@
 
         this.parse = _parse;
     }
-    
+
     Lexer.$inject = ['CALC_TOKENS', 'operatorsRegistry'];
 
     angular.module('dps.engine').service('lexer', Lexer);

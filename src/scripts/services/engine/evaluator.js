@@ -11,7 +11,14 @@
                 var value = _.find(context, function (c) {
                     return c.identifier.value === operand.value;
                 });
-                return Number(value.value);
+                if (value.type === CALC_TOKENS.FORMULA) {
+                    return value.formula.evaluate(context);
+                }
+                if (value.type === CALC_TOKENS.NUMBER) {
+                    return Number(value.value);
+                }
+                
+                throw 'Unidentified token ' + value.identifier.value;
             }
         }
 
@@ -37,20 +44,7 @@
         }
 
         function _evaluate(tokens, context) {
-            var updatedTokens = angular.copy(tokens);
-            // angular.forEach(updatedTokens, function (item) {
-            //     if (item.type === CALC_TOKENS.OPERATOR) {
-            //         var operator = _.findWhere(operators, { operator: item.value });
-            //         if (operator) {
-            //             item.priority = operator.priority + item.priority * priorityDifference;
-            //             item.evaluate = operator.evaluate;
-            //         }
-            //         else {
-            //             throw 'Operator ' + item.value + ' is not defined.';
-            //         }
-            //     }
-            // });
-            return _evaluatePart(updatedTokens, context);
+            return _evaluatePart(tokens, context);
         }
 
         this.evaluate = _evaluate;
