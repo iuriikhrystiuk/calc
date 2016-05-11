@@ -1,17 +1,17 @@
 (function () {
     // Grammar:
-    // digit = '1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9'
-    // zero = '0'
+    // digit = '0'|1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9'
     // underscore = '_'
     // dot = '.'
+    // comma = ','
     // letter = 'a'|'b'|'c'|'d'|'e'|'f'|'g'|'h'|'i'|'j'|'k'|'l'|'m'|'n'|'o'|'p'|'q'|'r'|'s'|'t'|'u'|'v'|'w'|'x'|'y'|'z'
-    // number = (digit,[{digit|zero}|zero]),[dot,{digit|zero}digit]
+    // number = {digit},[dot,{digit}]
     // operator = '+'|'-'|'*'|'/'
     // identifier = letter, {underscore|letter|digit|zero}
     // operand = number|identifier
     // term = operand|operand,operator,factor|'-',factor
     // factor = term|'(',term,')',operator,'(',factor,')'
-    // function = identifier,'(',factor,')'
+    // function = identifier,'(',[{factor,comma,factor}],')'
     // expression = factor|function
     // formula = expression|[expression],operator,expression
 
@@ -148,7 +148,7 @@
         function _parseOperand(str) {
             try {
                 var number = _parseNumber(str);
-                if (number) {
+                if (!isNaN(number)) {
                     tokens.push({
                         type: CALC_TOKENS.NUMBER,
                         value: number

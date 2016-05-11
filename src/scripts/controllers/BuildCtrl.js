@@ -12,7 +12,7 @@
                 $scope.result = '';
                 formula.create($scope.formula);
                 var result = formula.evaluate($scope.currentContext);
-                if (result) {
+                if (result !== '') {
                     $scope.result = result;
                 }
             } catch (error) {

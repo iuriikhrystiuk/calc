@@ -4,7 +4,7 @@
             try {
                 if (token.value) {
                     var value = Number(token.value);
-                    if (value) {
+                    if (!isNaN(value)) {
                         token.type = CALC_TOKENS.NUMBER;
                         return true;
                     }
