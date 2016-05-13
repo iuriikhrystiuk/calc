@@ -52,7 +52,7 @@
         }
 
         function _getIdentifiersFromFunc(token) {
-            var context = []
+            var context = [];
             _.each(token.params, function (p) {
                 _.each(p, function (item) {
                     if (item.type === CALC_TOKENS.IDENTIFIER) {
