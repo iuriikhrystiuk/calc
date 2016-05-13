@@ -148,7 +148,6 @@
                 else{
                     throw 'Function ' + token.value + ' is not defined';
                 }
-                priorityModifier += 1;
                 _nextChar(str);
                 while (str[position] !== ')') {
                     var paramEndPosition = _getParamEndIndex(str, position);
@@ -166,8 +165,6 @@
                 if (func.paramsCount > token.params.length) {
                     throw 'Invalid parameters count specified for function: ' + token.func;
                 }
-
-                priorityModifier -= 1;
                 _nextChar(str);
             }
         }

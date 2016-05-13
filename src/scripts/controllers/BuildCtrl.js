@@ -14,6 +14,7 @@
                 var result = formula.evaluate($scope.currentContext);
                 if (result !== '') {
                     $scope.result = result;
+                    formula.gatherCalculationResults($scope.currentContext);
                 }
             } catch (error) {
                 $scope.errors = error.message || error;

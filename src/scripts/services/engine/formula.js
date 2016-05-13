@@ -12,6 +12,19 @@
             return tokensContext;
         }
 
+        function _gatherCalculationResults(targetContext) {
+            _.each(tokensContext, function (item) {
+                if (item.type === CALC_TOKENS.FORMULA) {
+                    var target = _.find(targetContext, function (t) {
+                        return t.identifier.value === item.identifier.value;
+                    });
+                    if (target) {
+                        target.calculated = item.calculated;
+                    }
+                }
+            });
+        }
+
         function _evaluate(currentContext) {
             context.append(tokensContext, currentContext);
             if (!context.merge(tokensContext, currentContext)) {
@@ -36,12 +49,14 @@
                 }
             }
 
-            return evaluator.evaluate(tokens, tokensContext);
+            var result = evaluator.evaluate(tokens, tokensContext);
+            return result;
         }
 
         this.evaluate = _evaluate;
         this.create = _create;
         this.getContext = _getContext;
+        this.gatherCalculationResults = _gatherCalculationResults;
     }
 
     Formula.$inject = ['CALC_TOKENS', 'lexer', 'evaluator', 'context'];
