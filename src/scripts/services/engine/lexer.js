@@ -19,12 +19,12 @@
         whitespace = ' ',
         dot = '.',
         letter = '^[a-z]$',
-        digit = '^[0-9]$',
-        priorityModifier = 0,
-        tokens = [];
+        digit = '^[0-9]$';
 
-    function Lexer(CALC_TOKENS, operatorsRegistry) {
-        var position = 0;
+    function Lexer(CALC_TOKENS, operatorsRegistry, functionsRegistry) {
+        var position = 0,
+            priorityModifier = 0,
+            tokens = [];
 
         function _isUnderscore(c) {
             return c === underscore;
@@ -96,6 +96,12 @@
             }
         }
 
+        function _parseComma(str) {
+            if (str[position] === ',') {
+                _nextChar(str);
+            }
+        }
+
         function _parseFactor(str) {
             _parseOpenBracket(str);
             _parseTerm(str);
@@ -111,8 +117,59 @@
             }
         }
 
-        function _parseFunction(str) {
+        function _getParamEndIndex(str, startIndex) {
+            var openedBrackets = 0;
+            for (var index = startIndex; index < str.length; index++) {
+                var element = str[index];
+                if (element === '(') {
+                    openedBrackets++;
+                }
+                else if (element === ')') {
+                    if (openedBrackets === 0) {
+                        return index;
+                    }
+                    openedBrackets--;
+                } else if (element === ',' && openedBrackets === 0) {
+                    return index;
+                }
+            }
 
+            return -1;
+        }
+
+        function _parseFunction(str, token) {
+            if (str[position] === '(') {
+                token.type = CALC_TOKENS.FUNCTION;
+                var func = functionsRegistry.getFunction(token.value);
+                if (func) {
+                    angular.extend(token, func);
+                    token.params = [];
+                }
+                else{
+                    throw 'Function ' + token.value + ' is not defined';
+                }
+                priorityModifier += 1;
+                _nextChar(str);
+                while (str[position] !== ')') {
+                    var paramEndPosition = _getParamEndIndex(str, position);
+                    if (paramEndPosition < 0) {
+                        throw 'Unknown parameters composition for function at ' + position;
+                    }
+                    var parameterString = str.substring(position, paramEndPosition);
+                    var paramLexer = new Lexer(CALC_TOKENS, operatorsRegistry, functionsRegistry);
+                    var funcParam = paramLexer.parse(parameterString);
+                    token.params.push(funcParam);
+                    position = paramEndPosition;
+                    _parseComma(str);
+                }
+
+                if (func.paramsCount > token.params.length) {
+                    throw 'Invalid parameters count specified for function: ' + token.func;
+                }
+
+                priorityModifier -= 1;
+                _nextChar(str);
+            }
         }
 
         function _parseTerm(str) {
@@ -159,10 +216,12 @@
             } catch (error) {
                 var identifier = _parseIdentifier(str);
                 if (identifier) {
-                    tokens.push({
+                    var token = {
                         type: CALC_TOKENS.IDENTIFIER,
                         value: identifier
-                    });
+                    };
+                    tokens.push(token);
+                    _parseFunction(str, token);
                 }
                 else {
                     throw 'Operand expected at ' + position;
@@ -214,7 +273,7 @@
         this.parse = _parse;
     }
 
-    Lexer.$inject = ['CALC_TOKENS', 'operatorsRegistry'];
+    Lexer.$inject = ['CALC_TOKENS', 'operatorsRegistry', 'functionsRegistry'];
 
     angular.module('dps.engine').service('lexer', Lexer);
 } ());

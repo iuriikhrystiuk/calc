@@ -1,5 +1,5 @@
 (function () {
-    function Evaluator(CALC_TOKENS, operatorsRegistry) {
+    function Evaluator(CALC_TOKENS, operatorsRegistry, functionsRegistry) {
         var priorityDifference = operatorsRegistry.getPriorityDifference(),
             operators = operatorsRegistry.getOperators();
 
@@ -11,14 +11,23 @@
                 var value = _.find(context, function (c) {
                     return c.identifier.value === operand.value;
                 });
+                if (!value) {
+                    throw 'No value specified for identifier ' + operand.value;
+                }
                 if (value.type === CALC_TOKENS.FORMULA) {
                     return value.formula.evaluate(context);
                 }
                 if (value.type === CALC_TOKENS.NUMBER) {
                     return Number(value.value);
                 }
-                
+
                 throw 'Unidentified token ' + value.identifier.value;
+            }
+            if (operand.type === CALC_TOKENS.FUNCTION) {
+                var params = _.map(operand.params, function (item) {
+                    return _evaluatePart(item, context);
+                });
+                return operand.evaluate.apply(null, params);
             }
         }
 
@@ -26,8 +35,7 @@
             if (tokens.length === 0) {
                 return 0;
             }
-
-            if (tokens.length === 1) {
+            else if (tokens.length === 1) {
                 return _evaluateOperand(tokens[0], context);
             }
 
@@ -37,6 +45,7 @@
                 }
                 return undefined;
             });
+
             var operatorIndex = _.indexOf(tokens, operator);
             var leftPart = _.first(tokens, operatorIndex);
             var rightPart = _.rest(tokens, operatorIndex + 1);
@@ -50,7 +59,7 @@
         this.evaluate = _evaluate;
     }
 
-    Evaluator.$inject = ['CALC_TOKENS', 'operatorsRegistry'];
+    Evaluator.$inject = ['CALC_TOKENS', 'operatorsRegistry', 'functionsRegistry'];
 
     angular.module('dps.engine').service('evaluator', Evaluator);
 } ());

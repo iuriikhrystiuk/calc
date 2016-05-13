@@ -5,6 +5,8 @@
         OPERATOR: 'OPERATOR',
         IDENTIFIER: 'IDENTIFIER',
         NUMBER: 'NUMBER',
+        FUNCTION: 'FUNCTION',
+        SEPARATOR: 'SEPARATOR',
         FORMULA: 'FORMULA'
     };
     

@@ -51,8 +51,30 @@
             return populatedItems === targetContext.length;
         }
 
+        function _getIdentifiersFromFunc(token) {
+            var context = []
+            _.each(token.params, function (p) {
+                _.each(p, function (item) {
+                    if (item.type === CALC_TOKENS.IDENTIFIER) {
+                        context.push(item);
+                    }
+                });
+            });
+            return context;
+        }
+
         function _get(tokens) {
-            var context = _.where(tokens, { type: CALC_TOKENS.IDENTIFIER });
+            var context = [];
+            _.each(tokens, function (t) {
+                if (t.type === CALC_TOKENS.IDENTIFIER) {
+                    context.push(t);
+                }
+                if (t.type === CALC_TOKENS.FUNCTION) {
+                    _.each(_getIdentifiersFromFunc(t), function (p) {
+                        context.push(p);
+                    });
+                }
+            });
             context = _.uniq(context, false, function (item) {
                 return item.value;
             });
