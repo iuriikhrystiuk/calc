@@ -10,7 +10,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-angular-templates');
     grunt.loadNpmTasks('grunt-htmlmin');
-    
+
     // Project configuration.
     grunt.initConfig({
         app: {
@@ -99,7 +99,7 @@ module.exports = function (grunt) {
         ngtemplates: {
             app: {
                 cwd: 'src',
-                src: 'views/**/*.html',
+                src: ['views/**/*.html', 'scripts/**/*.html'],
                 dest: '.tmp/templates/app.templates.js',
                 options: {
                     module: 'dps',
