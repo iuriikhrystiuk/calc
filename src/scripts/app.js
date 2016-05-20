@@ -20,6 +20,12 @@
             controller: 'BuildCtrl',
             templateUrl: 'views/build.html'
         });
+        
+        $stateProvider.state(APP_STATES.APP.MODEL, {
+            url: 'model',
+            controller: 'ModelCtrl',
+            templateUrl: 'views/model.html'
+        });
     }
 
     Configurer.$inject = ['$stateProvider', '$urlRouterProvider', 'APP_STATES'];

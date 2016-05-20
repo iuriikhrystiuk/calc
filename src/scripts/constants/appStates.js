@@ -5,7 +5,8 @@
         APP: {
             STATE: 'app',
             BUILD: 'app.build',
-            HOME: 'app.home'
+            HOME: 'app.home',
+            MODEL: 'app.model'
         }
     };
     

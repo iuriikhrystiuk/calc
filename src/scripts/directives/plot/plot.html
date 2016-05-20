@@ -1,0 +1,44 @@
+<div>
+    <div class="col-md-8">
+        <form class="form-horizontal" name="plot">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Variable</label>
+                <div class="col-sm-9">
+                    <select name="variable" class="form-control" ng-model="variable" ng-options="ctx.identifier.value for ctx in context"></select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Range</label>
+                <div class="col-sm-3">
+                    <input name="from" type="text" ng-model="from" class="form-control" placeholder="from" required />
+                </div>
+                <div class="col-sm-3">
+                    <input name="to" type="text" ng-model="to" class="form-control" placeholder="to" required />
+                </div>
+                <div class="col-sm-2">
+                    <input name="step" type="text" ng-model="step" class="form-control" placeholder="step" required />
+                </div>
+                <div class="col-sm-1">
+                    <button class="btn btn-default" ng-disabled="plot.$invalid" ng-click="buildPlot()">GO!</button>
+                </div>
+            </div>
+        </form>
+        <div class="text-center">
+            <canvas width="500" height="500">
+                Your Browser does not support canvas unfortunately.
+            </canvas>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <h4>Rules:</h4>
+        <div>
+            <small>* the variable must be selected in order to build plot</small>
+        </div>
+        <div>
+            <small>* 'From', 'To' values specify variable range</small>
+        </div>
+        <div>
+            <small>* 'Step' value is required to build variable values collection</small>
+        </div>
+    </div>
+</div>

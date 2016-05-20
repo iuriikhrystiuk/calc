@@ -19,6 +19,7 @@ module.exports = function (grunt) {
                 'scripts/constants/*.js',
                 'scripts/*.js',
                 'scripts/services/**/*.js',
+                'scripts/directives/**/*.js',
                 'scripts/controllers/*.js'
             ]
         },

@@ -5,6 +5,8 @@
         $scope.result = '';
         $scope.errors = null;
         $scope.currentContext = [];
+        $scope.plotInitiated = false;
+        $scope.plotFormula = null;
 
         function _calculate() {
             try {
@@ -22,15 +24,27 @@
 
         }
 
+        function _plot() {
+            $scope.plotInitiated = true;
+            $scope.plotFormula = formula;
+        }
+
+        function _canPlot() {
+            return $scope.result !== '';
+        }
+
         function _clear() {
             $scope.errors = null;
             $scope.result = '';
             $scope.formula = '';
             $scope.currentContext = [];
+            $scope.plotInitiated = false;
         }
-
+        
+        $scope.canPlot = _canPlot;
         $scope.calculate = _calculate;
         $scope.clear = _clear;
+        $scope.plot = _plot;
     }
 
     BuildController.$inject = ['$scope', 'formula'];

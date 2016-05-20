@@ -1,0 +1,41 @@
+<h1>Create your own model!</h1>
+<div class="row">
+    <div class="col-sm-offset-10 col-sm-2 text-right">
+        <button class="btn btn-default" ng-click="addGroup()"><span class="glyphicon glyphicon-plus-sign"></span> Add Group</button>
+    </div>
+</div>
+<div ng-repeat="group in groups">
+    <hr />
+    <div class="row">
+        <div class="col-sm-2">
+            <button class="btn btn-default" ng-click="removeGroup(group)"><span class="glyphicon glyphicon-remove"></span> Remove Group</button>
+        </div>
+        <div class="col-sm-4">
+            <div class="input-group">
+                <input type="text" class="form-control" ng-model="group.name" />
+                <!--<span class="input-group-addon" ng-click="editGroup()"><span class="glyphicon glyphicon-pencil"></span></span>-->
+            </div>
+        </div>
+        <div class="col-sm-offset-2 col-sm-2 text-right">
+            <button class="btn btn-default" ng-click="addDescriptor(group)"><span class="glyphicon glyphicon-plus-sign"></span> Add Descriptor</button>
+        </div>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="col-sm-2"></th>
+                <th class="col-sm-2">Identifier</th>
+                <th class="col-sm-3">Description</th>
+                <th class="col-sm-5">Value</th>
+            </tr>
+        </thead>
+        <tbody ng-repeat="descriptor in group.descriptors">
+            <tr>
+                <td class="col-sm-2 text-center"><button class="btn btn-default btn-sm" ng-click="removeDescriptor(group, descriptor)"><span class="glyphicon glyphicon-remove"></span></button></td>
+                <td class="col-sm-2"><input type="text" class="form-control" ng-model="descriptor.identifier" /></td>
+                <td class="col-sm-3"><input type="text" class="form-control" ng-model="descriptor.description" /></td>
+                <td class="col-sm-5"><input type="text" class="form-control" ng-model="descriptor.value" /></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
