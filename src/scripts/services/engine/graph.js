@@ -4,7 +4,8 @@
     function Graph() {
         var context,
             ratio,
-            offset = 12;
+            offset = 12,
+            netCapacity = 40;
 
         function _calculateScale(plotPoints) {
             var maxY = _.max(plotPoints, function (item) {
@@ -48,6 +49,18 @@
         }
 
         function _calculatePoints(formula, ctx, variable) {
+            if (variable.bottomMargin >= variable.topMargin) {
+                throw 'The variable ranges must be specified correctly.';
+            }
+
+            if ((variable.topMargin - variable.bottomMargin) < variable.step ) {
+                throw 'The step value must be lower than range.';
+            }
+
+            if ((variable.topMargin - variable.bottomMargin) / variable.step > netCapacity) {
+                throw 'There is not enough graph capacity to display the net.';
+            }
+
             var points = [];
             for (var value = variable.bottomMargin; value <= variable.topMargin; value += variable.step) {
                 var abscissa = _.find(ctx, _predicate.bind(variable));
@@ -66,7 +79,7 @@
                 return item.y;
             });
             var denominator = 1;
-            while ((maxY.y - minY.y) / denominator > denominator) {
+            while ((maxY.y - minY.y) / denominator > netCapacity) {
                 denominator *= 10;
             }
             var result = [];
@@ -96,7 +109,7 @@
                     }
                 });
             }
-            
+
             var values = _getValuesCollection(plotPoints);
             for (var index = 0; index < values.length; index++) {
                 var element = values[index];
