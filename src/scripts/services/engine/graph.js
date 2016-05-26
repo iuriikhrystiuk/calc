@@ -48,12 +48,16 @@
             return item.identifier.value === this.name;
         }
 
+        function _toFixedDecimal(value, places) {
+            return +(Math.round(value + "e+" + places) + "e-" + places);
+        }
+
         function _calculatePoints(formula, ctx, variable) {
             if (variable.bottomMargin >= variable.topMargin) {
                 throw 'The variable ranges must be specified correctly.';
             }
 
-            if ((variable.topMargin - variable.bottomMargin) < variable.step ) {
+            if ((variable.topMargin - variable.bottomMargin) < variable.step) {
                 throw 'The step value must be lower than range.';
             }
 
@@ -153,7 +157,7 @@
                 if (line.from.x === line.to.x) {
                     context.font = '12px Arial';
                     context.fillStyle = 'red';
-                    context.fillText(line.from.x, toPoint.x - offset / 2, toPoint.y + offset);
+                    context.fillText(_toFixedDecimal(line.from.x, 2), toPoint.x - offset / 2, toPoint.y + offset);
                 }
 
                 if (line.from.y === line.to.y) {

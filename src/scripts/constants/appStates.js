@@ -6,7 +6,8 @@
             STATE: 'app',
             BUILD: 'app.build',
             HOME: 'app.home',
-            MODEL: 'app.model'
+            MODEL: 'app.model',
+            PLOT: 'app.plot'
         }
     };
     

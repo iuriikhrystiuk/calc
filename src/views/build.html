@@ -1,9 +1,4 @@
 <h1>Build your own formula!</h1>
-<hr ng-show="plotInitiated" />
-<div class="row">
-    <plot formula="plotFormula" context="currentContext" ng-show="plotInitiated">
-    </plot>
-</div>
 <hr />
 <div class="row">
     <div class="col-sm-8">
@@ -48,7 +43,6 @@
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
                     <button type="submit" class="btn btn-default" ng-click="calculate()">Calculate</button>
-                    <button type="submit" class="btn btn-default" ng-click="plot()" ng-disabled="!canPlot()">Plot It</button>
                     <button type="submit" class="btn btn-default" ng-click="clear()">Clear</button>
                 </div>
             </div>

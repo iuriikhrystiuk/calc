@@ -36,8 +36,28 @@
                     }
                 }
 
-                $scope.variable = null;
                 $scope.buildPlot = _buildPlot;
+                var clearContextWatcher = $scope.$watch('context', function (newValue, oldValue) {
+                    if (newValue !== oldValue) {
+                        if ($scope.context.length === 1) {
+                            $scope.variable = $scope.context[0];
+                        }
+                        else if (_.filter($scope.context, function (item) {
+                            return item.value === null || item.value === '';
+                        }).length === 1) {
+                            $scope.variable = _.find($scope.context, function (item) {
+                                return item.value === null || item.value === '';
+                            });
+                        }
+                        else {
+                            $scope.variable = null;
+                        }
+                    }
+                });
+
+                $scope.$on('$destroy', function () {
+                    clearContextWatcher();
+                });
             }]
         };
     }

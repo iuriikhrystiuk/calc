@@ -26,6 +26,12 @@
             controller: 'ModelCtrl',
             templateUrl: 'views/model.html'
         });
+        
+        $stateProvider.state(APP_STATES.APP.PLOT, {
+            url: 'plot',
+            controller: 'PlotCtrl',
+            templateUrl: 'views/plot.html'
+        });
     }
 
     Configurer.$inject = ['$stateProvider', '$urlRouterProvider', 'APP_STATES'];
