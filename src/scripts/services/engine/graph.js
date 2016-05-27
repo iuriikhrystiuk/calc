@@ -5,7 +5,8 @@
         var context,
             ratio,
             offset = 12,
-            netCapacity = 40;
+            netCapacity = 40,
+            netRatio;
 
         function _calculateScale(plotPoints) {
             var maxY = _.max(plotPoints, function (item) {
@@ -20,11 +21,14 @@
             var minX = _.min(plotPoints, function (item) {
                 return item.x;
             });
+            var yHeight = netRatio ? context.canvas.height - (maxY.y - minY.y) / netRatio.y : 0;
+            var ratioOffset = netRatio ? 0 : offset * 2;
             ratio = {
                 x: (maxX.x - minX.x) / (context.canvas.width - offset * 2),
-                y: (maxY.y - minY.y) / (context.canvas.height - offset * 2),
+                y: (maxY.y - minY.y) / (context.canvas.height - yHeight - ratioOffset),
                 xCorrection: minX.x,
-                yCorrection: minY.y
+                yCorrection: netRatio ? netRatio.yCorrection : minY.y,
+                yHeight: yHeight
             };
         }
 
@@ -66,12 +70,13 @@
             }
 
             var points = [];
+            var abscissa = _.find(ctx, _predicate.bind(variable));
+            var defaultValue = abscissa.value;
             for (var value = variable.bottomMargin; value <= variable.topMargin; value += variable.step) {
-                var abscissa = _.find(ctx, _predicate.bind(variable));
                 abscissa.value = value;
                 points.push({ x: value, y: formula.evaluate(ctx) });
             }
-
+            abscissa.value = defaultValue;
             return points;
         }
 
@@ -132,7 +137,7 @@
             return netLines;
         }
 
-        function _connectPoints(plotPoints) {
+        function _connectPoints(plotPoints, variable) {
             context.beginPath();
             var coordinate = _translateCoordinate(plotPoints[0], true);
             context.moveTo(coordinate.x, coordinate.y);
@@ -143,7 +148,7 @@
             }
 
             context.lineJoin = 'round';
-            context.strokeStyle = 'green';
+            context.strokeStyle = variable.color;
             context.stroke();
             context.closePath();
         }
@@ -184,12 +189,9 @@
 
             if (variables.length === 1) {
                 // make 2-d graph
-                context.clearRect(0, 0, context.canvas.width, context.canvas.height);
                 var plotPoints = _calculatePoints(formula, ctx, variables[0]);
-                var netLines = _calculateNetLines(plotPoints, variables[0]);
                 _calculateScale(plotPoints);
-                _drawLines(netLines);
-                _connectPoints(plotPoints);
+                _connectPoints(plotPoints, variables[0]);
             }
         }
 
@@ -197,8 +199,39 @@
             context = ctx;
         }
 
+        function _clear() {
+            context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+            netRatio = null;
+            ratio = null;
+        }
+
+        function _plotNet(formula, ctx, variables, ranges) {
+            var plotPoints = [];
+            _.each(variables, function (variable) {
+                var abscissa = _.find(ctx, _predicate.bind({ name: variable.identifier.value }));
+                var defaultValue = abscissa.value;
+                abscissa.value = ranges.topMargin;
+                plotPoints.push({
+                    x: abscissa.value,
+                    y: formula.evaluate(ctx)
+                });
+                abscissa.value = ranges.bottomMargin;
+                plotPoints.push({
+                    x: abscissa.value,
+                    y: formula.evaluate(ctx)
+                });
+                abscissa.value = defaultValue;
+            });
+            var netLines = _calculateNetLines(plotPoints, ranges);
+            _calculateScale(plotPoints);
+            netRatio = angular.copy(ratio);
+            _drawLines(netLines);
+        }
+
         this.init = _init;
         this.plot = _plot;
+        this.plotNet = _plotNet;
+        this.clear = _clear;
     }
 
     angular.module('dps.engine').service('graph', Graph);

@@ -1,5 +1,5 @@
 (function () {
-    function PlotController($scope, formula) {
+    function PlotController($scope, formula, context, CALC_TOKENS) {
 
         $scope.formula = '';
         $scope.errors = null;
@@ -9,33 +9,15 @@
 
         function _validate() {
             try {
-                var context = [];
-                if ($scope.currentContext.length > 0) {
-                    context = $scope.currentContext;
-                }
+                var ctx = [];
                 $scope.errors = null;
-                $scope.result = '';
+                
                 formula.create($scope.formula);
-                var result = formula.evaluate(context);
-                if (context.length < 1) {
-                    $scope.errors = 'Specify a valid non-static function';
-                }
-                else if (context.length === 1 || _.filter(context, function (item) {
-                    return item.value === null || item.value === '';
-                }).length === 1) {
-                    $scope.plotFormula = formula;
-                    $scope.plotContext = context;
-                }
-                else if (result !== '') {
-                    $scope.result = result;
-                    $scope.plotFormula = formula;
-                    formula.gatherCalculationResults(context);
-                }
-                else {
-                    $scope.plotFormula = null;
-                    $scope.plotContext = [];
-                    $scope.currentContext = context;
-                }
+                formula.evaluate(ctx);
+                context.merge(ctx, $scope.currentContext);
+                formula.evaluate(ctx);
+                $scope.plotFormula = formula;
+                $scope.plotContext = ctx;
             } catch (error) {
                 $scope.errors = error.message || error;
             }
@@ -44,15 +26,32 @@
         function _clear() {
             $scope.errors = null;
             $scope.formula = '';
-            $scope.currentContext = [];
             $scope.plotContext = [];
+            $scope.plotFormula = null;
+        }
+
+        function _addVariable() {
+            $scope.currentContext.push({
+                identifier: {
+                    type: CALC_TOKENS.IDENTIFIER,
+                    value: null
+                },
+                value: null
+            });
+        }
+
+        function _deleteVariable(variable) {
+            var index = _.indexOf($scope.currentContext, variable);
+            $scope.currentContext.splice(index, 1);
         }
 
         $scope.clear = _clear;
         $scope.validate = _validate;
+        $scope.addVariable = _addVariable;
+        $scope.deleteVariable = _deleteVariable;
     }
 
-    PlotController.$inject = ['$scope', 'formula'];
+    PlotController.$inject = ['$scope', 'formula', 'context', 'CALC_TOKENS'];
 
     angular.module('dps').controller('PlotCtrl', PlotController);
 } ());

@@ -1,36 +1,56 @@
 <div>
     <div class="col-md-8">
         <form class="form-horizontal" name="plot">
-            <div class="form-group">
-                <label class="col-sm-2 control-label">Variable</label>
-                <div class="col-sm-9">
-                    <select name="variable" class="form-control" ng-model="variable" required ng-options="ctx.identifier.value for ctx in context"></select>
+            <div ng-repeat="item in context">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Variable: {{item.identifier.value}}</label>
+                    <div class="col-sm-5">
+                        <select name="variableType" class="form-control" ng-model="item.variableType" required ng-options="type.name for type in variableTypes track by type.code"></select>
+                    </div>
+                    <div class="col-sm-5" ng-if="item.variableType.code === 2">
+                        <input type="color" class="form-control" ng-model="item.color" />
+                    </div>
                 </div>
+                <div class="form-group" ng-if="item.variableType.code === 1">
+                    <label class="col-sm-2 control-label">Value</label>
+                    <div class="col-sm-10">
+                        <input name="value" type="text" ng-model="item.value" class="form-control" required />
+                    </div>
+                </div>
+                <div class="form-group" ng-if="item.variableType.code === 2">
+                    <label class="col-sm-2 control-label">Default Value</label>
+                    <div class="col-sm-10">
+                        <input name="defaultValue" type="text" ng-model="item.defaultValue" class="form-control" required numeric />
+                    </div>
+                </div>
+                <hr />
             </div>
             <div class="form-group">
                 <label class="col-sm-2 control-label">Range</label>
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <input name="from" type="text" ng-model="from" class="form-control" placeholder="from" required numeric />
                     <small ng-show="plot.from.$error.numeric">* value should be numeric</small>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <input name="to" type="text" ng-model="to" class="form-control" placeholder="to" required numeric />
                     <small ng-show="plot.to.$error.numeric">* value should be numeric</small>
                 </div>
                 <div class="col-sm-2">
-                    <input name="step" type="text" ng-model="step" class="form-control" placeholder="step" required numeric greater-than="0"
-                    />
+                    <input name="step" type="text" ng-model="step" class="form-control" placeholder="step" required numeric greater-than="0" />
                     <small ng-show="plot.step.$error.numeric">* value should be numeric</small>
                     <small ng-show="plot.step.$error.greaterThan">* value should be greater than 0</small>
                 </div>
-                <div class="col-sm-1">
-                    <button class="btn btn-default" ng-disabled="plot.$invalid" ng-click="buildPlot()">GO!</button>
-                </div>
+
             </div>
             <div class="form-group" ng-show="error">
                 <label class="col-sm-2 control-label">Errors:</label>
                 <div class="col-sm-10">
                     <p class="form-control-static">{{error}}</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button class="btn btn-default" ng-disabled="plot.$invalid" ng-click="buildPlot()">GO!</button>
                 </div>
             </div>
         </form>
