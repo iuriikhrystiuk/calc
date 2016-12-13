@@ -6,6 +6,7 @@
             ratio,
             offset = 12,
             netCapacity = 40,
+            epsilon = 0.00000000000001,
             netRatio;
 
         function _calculateScale(plotPoints) {
@@ -72,7 +73,7 @@
             var points = [];
             var abscissa = _.find(ctx, _predicate.bind(variable));
             var defaultValue = abscissa.value;
-            for (var value = variable.bottomMargin; value <= variable.topMargin; value += variable.step) {
+            for (var value = variable.bottomMargin; value <= variable.topMargin || (value > variable.topMargin && Math.abs(value - variable.topMargin) <= epsilon); value += variable.step) {
                 abscissa.value = value;
                 points.push({ x: value, y: formula.evaluate(ctx) });
             }
@@ -106,7 +107,7 @@
             var minY = _.min(plotPoints, function (item) {
                 return item.y;
             });
-            for (var value = variable.bottomMargin; value <= variable.topMargin; value += variable.step) {
+            for (var value = variable.bottomMargin; value <= variable.topMargin || (value > variable.topMargin && Math.abs(value - variable.topMargin) <= epsilon); value += variable.step) {
                 netLines.push({
                     from: {
                         x: value,

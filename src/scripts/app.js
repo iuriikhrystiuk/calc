@@ -32,6 +32,12 @@
             controller: 'PlotCtrl',
             templateUrl: 'views/plot.html'
         });
+
+        $stateProvider.state(APP_STATES.APP.POLYGON, {
+            url: 'polygon',
+            controller: 'PolygonCtrl',
+            templateUrl: 'views/polygon.html'
+        });
     }
 
     Configurer.$inject = ['$stateProvider', '$urlRouterProvider', 'APP_STATES'];

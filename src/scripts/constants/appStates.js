@@ -7,7 +7,8 @@
             BUILD: 'app.build',
             HOME: 'app.home',
             MODEL: 'app.model',
-            PLOT: 'app.plot'
+            PLOT: 'app.plot',
+            POLYGON: 'app.polygon'
         }
     };
     

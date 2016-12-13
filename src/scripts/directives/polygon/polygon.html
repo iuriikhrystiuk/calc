@@ -1,0 +1,26 @@
+<div>
+    <form class="form-horizontal" name="polygon">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Width</label>
+            <div class="col-sm-2">
+                <input name="width" type="text" ng-model="width" class="form-control" placeholder="width" required numeric />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Height</label>
+            <div class="col-sm-2">
+                <input name="height" type="text" ng-model="height" class="form-control" placeholder="height" required numeric />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-2">
+                <button class="btn-default btn" ng-click="clear()">Clear</button>
+            </div>
+        </div>
+    </form>
+    <div class="text-center">
+        <canvas style="border: 1px solid black" ng-attr-width="{{width}}" ng-attr-height="{{height}}">
+            Your Browser does not support canvas unfortunately.
+        </canvas>
+    </div>
+</div>
